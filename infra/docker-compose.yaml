@@ -1,0 +1,42 @@
+version: "2.3"
+
+services:
+  postgres-driver:
+    container_name: postgres-driver
+    hostname: postgres-driver
+    image: postgres:10-alpine
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=tracking
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tracking
+    volumes:
+      - ./dbscripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-private-network
+
+  driver-localstack:
+    container_name: driver-localstack
+    hostname: localstack
+    image: markglh/initialised-localstack:latest
+    ports:
+      - "4567-4584:4567-4584"
+      - 8088:8080
+    environment:
+      - SERVICES=cloudformation,sqs
+      - DEBUG=1
+    volumes:
+      - ./queues:/opt/bootstrap/templates
+      - "TMPDIR=/private$TMPDIR"
+    networks:
+      - app-private-network
+    logging:
+      driver: none
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+networks:
+  app-private-network:
+    driver: bridge

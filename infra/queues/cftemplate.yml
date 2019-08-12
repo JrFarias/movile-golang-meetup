@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  TrackingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "DRIVER_TRACKING_QUEUE"
+  OrderQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "DRIVER_QUEUE"
