@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
-  TrackingQueue:
+  DriverTrackingQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: "DRIVER_TRACKING_QUEUE"
-  OrderQueue:
+  DriverQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: "DRIVER_QUEUE"

@@ -91,7 +91,9 @@ func (service *SQSService) Start(handler Handler) {
 
 // poll launches goroutine per received message and wait for all message to be processed
 func run(service *SQSService, handler Handler, messages []*sqs.Message) {
-	numMessages := len(messages)
+  numMessages := len(messages)
+  
+  log.Println("numMessages %v", numMessages)
 
 	var wg sync.WaitGroup
 	wg.Add(numMessages)
@@ -117,10 +119,9 @@ func handleMessage(service *SQSService, message *sqs.Message, handler Handler) e
 		return err
 	}
 
-	// Delete the processed (or invalid) message
 	params := &sqs.DeleteMessageInput{
-		QueueUrl:      aws.String(service.SQSURL), // Required
-		ReceiptHandle: message.ReceiptHandle,      // Required
+		QueueUrl:      aws.String(service.SQSURL), 
+		ReceiptHandle: message.ReceiptHandle,      
 	}
 	_, err = service.SQS.DeleteMessage(params)
 	if err != nil {

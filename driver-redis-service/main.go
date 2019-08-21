@@ -34,7 +34,7 @@ func saveOnRedis(tracking Tracking) {
 
 }
 
-func process(msg *sqs.Message) error {
+func processSQS(msg *sqs.Message) error {
 	if msg.Body != nil {
 		var tracking Tracking
 		json.Unmarshal([]byte(*msg.Body), &tracking)
@@ -48,12 +48,11 @@ func process(msg *sqs.Message) error {
 
 func main() {
 	worker, err := consumer.NewSQSService("http://localhost:4576/queue/DRIVER_QUEUE", "us-east-1")
-	log.Println("consumer running...")
 
 	if err != nil {
 		log.Printf("Error creating new Worker Service: %s\n", err)
 	}
 
-	worker.Start(consumer.HandlerFunc(process))
-
+	log.Println("consumer running...")
+	worker.Start(consumer.HandlerFunc(processSQS))
 }
